@@ -106,24 +106,35 @@ void UTerminal::OnKeyDown(FKey Key)
 	{
 		AcceptInputLine();
 	}
-
-	if (Key == EKeys::BackSpace)
+	else if (Key == EKeys::BackSpace)
 	{
 		Backspace();
 	}
-
-	const FString KeyString = GetKeyString(Key);
-	const FModifierKeysState KeyState = FSlateApplication::Get().GetModifierKeys();
-	if (KeyState.IsShiftDown() || KeyState.AreCapsLocked())
+	else if (Key == EKeys::Up)
 	{
-		InputLine += KeyString.ToUpper();
+		UpKey();
 	}
-	else
+	else if (Key == EKeys::Down)
 	{
-		InputLine += KeyString.ToLower();
+		DownKey();
 	}
-
+	else 
+	{
+		const FString KeyString = GetKeyString(Key);
+		const FModifierKeysState KeyState = FSlateApplication::Get().GetModifierKeys();
+		if (KeyState.IsShiftDown() || KeyState.AreCapsLocked())
+		{
+			InputLine += KeyString.ToUpper();
+		}
+		else
+		{
+			InputLine += KeyString.ToLower();
+		}
+		TerminalHistory.CurrentLine = InputLine;
+		TerminalHistory.SetIndexToLast();
+	}
 	UpdateText();
+
 }
 
 
@@ -135,6 +146,7 @@ void UTerminal::AcceptInputLine()
 	{
 		Cartridge->OnInput(InputLine);
 	}
+	TerminalHistory.Add(InputLine);
 	InputLine = TEXT("");
 
 }
@@ -145,6 +157,16 @@ void UTerminal::Backspace()
 	{
 		InputLine.RemoveAt(InputLine.Len() - 1);
 	}
+}
+
+void UTerminal::UpKey()
+{
+	InputLine = TerminalHistory.GetPrevious();
+}
+
+void UTerminal::DownKey()
+{
+	InputLine = TerminalHistory.GetNext();
 }
 
 FString UTerminal::GetKeyString(FKey Key) const

@@ -11,6 +11,43 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTextUpdateSignature, FString, Text)
 
 struct FKey;
 
+struct FTerminalHistory
+{
+
+	TArray<FString> Lines;
+	int32 CurrentIndex = 0;
+	FString CurrentLine;
+
+	void Add(const FString& Line)
+	{
+		Lines.Add(Line);
+		CurrentIndex = Lines.Num();
+	}
+
+	void SetIndexToLast()
+	{
+		CurrentIndex = Lines.Num();
+	}
+
+	FString GetPrevious()
+	{
+		if (CurrentIndex > 0)
+		{
+			CurrentIndex--;
+		}
+		return CurrentIndex < Lines.Num() ? Lines[CurrentIndex] : FString();
+	}
+
+	FString GetNext()
+	{
+		if (CurrentIndex < Lines.Num())
+		{
+			CurrentIndex++;
+		}
+		return CurrentIndex < Lines.Num() ? Lines[CurrentIndex] : CurrentLine;
+	}
+};
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class TERMINSEEK_API UTerminal : public UActorComponent
 {
@@ -43,6 +80,8 @@ private:
 	FString JoinWithNewline(const TArray<FString>& Lines) const;
 	void AcceptInputLine();
 	void Backspace();
+	void UpKey();
+	void DownKey();
 	FString GetKeyString(FKey Key) const;
 	void UpdateText();
 
@@ -58,4 +97,6 @@ private:
 
 	int32 PressedBindingIndex;
 	int32 RepeatBindingIndex;
+
+	FTerminalHistory TerminalHistory;
 };

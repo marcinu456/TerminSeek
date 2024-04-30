@@ -17,7 +17,7 @@ struct FTerminalCommands
 		switch(CommandInfo)
 		{
 		case ETerminalCommands::TC_Help:
-				return "Help: Displays all available commands\n "
+				return "Help: Displays all available commands\n"
 				"Clear: Clears the terminal\n"
 				"Exit: Exits the terminal";
 		default:

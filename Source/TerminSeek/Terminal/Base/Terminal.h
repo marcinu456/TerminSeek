@@ -9,6 +9,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTextUpdateSignature, FString, Text);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTextWriteLineSignature, FString, Text);
+
 struct FKey;
 
 struct FTerminalHistory
@@ -57,6 +59,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Terminal")
 	FTextUpdateSignature TextUpdated;
 
+	UPROPERTY(BlueprintAssignable, Category = "Terminal")
+	FTextWriteLineSignature TextWriteLine;
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FString GetScreenText() const;
 
@@ -83,7 +88,8 @@ private:
 	void UpKey();
 	void DownKey();
 	FString GetKeyString(FKey Key) const;
-	void UpdateText();
+	void UpdateCurrentTextLine();
+	void WriteLine(FString& Line);
 
 
 	UPROPERTY(EditAnywhere)
@@ -92,7 +98,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 MaxColumns = 70;
 
-	TArray<FString> Buffer;
 	FString InputLine;
 
 	int32 PressedBindingIndex;

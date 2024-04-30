@@ -26,4 +26,6 @@ private:
 
 	FTerminalCommands TerminalCommand;
 
+	TArray<FString> SplitLine(const FString& Line);
+
 };

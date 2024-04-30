@@ -10,7 +10,7 @@ constexpr TCHAR GPrompt[4] = TEXT("$> ");
 void UTerminal::BeginPlay()
 {
 	Super::BeginPlay();
-	UpdateText();
+	UpdateCurrentTextLine();
 }
 
 void UTerminal::ActivateTerminal()
@@ -38,6 +38,7 @@ void UTerminal::DeactivateTerminal() const
 
 void UTerminal::PrintLine(const FString& Line)
 {
+	TArray<FString> Buffer;
 	FString Input = Line;
 	FString Left, Right;
 	while (Input.Split(TEXT("\n"), &Left, &Right))
@@ -46,18 +47,19 @@ void UTerminal::PrintLine(const FString& Line)
 		Input = Right;
 	}
 	Buffer.Emplace(Input);
-	UpdateText();
+	auto buffLine = Line;
+	WriteLine(buffLine);
 }
 
 void UTerminal::ClearScreen()
 {
-	Buffer.Empty();
-	UpdateText();
+	//Buffer.Empty();
+	//UpdateText();
 }
 
 FString UTerminal::GetScreenText() const
 {
-	TArray<FString> FullTerminal = Buffer;
+	TArray<FString> FullTerminal;
 	FullTerminal.Add(GPrompt + InputLine);
 
 	// WrapLines
@@ -133,14 +135,14 @@ void UTerminal::OnKeyDown(FKey Key)
 		TerminalHistory.CurrentLine = InputLine;
 		TerminalHistory.SetIndexToLast();
 	}
-	UpdateText();
+	UpdateCurrentTextLine();
 
 }
 
 
 void UTerminal::AcceptInputLine()
 {
-	Buffer.Emplace(GPrompt + InputLine);
+	//Buffer.Emplace(GPrompt + InputLine);
 	auto Cartridge = GetOwner()->FindComponentByClass<UCartridge>();
 	if (Cartridge != nullptr)
 	{
@@ -183,7 +185,12 @@ FString UTerminal::GetKeyString(FKey Key) const
 	return TEXT("");
 }
 
-void UTerminal::UpdateText()
+void UTerminal::UpdateCurrentTextLine()
 {
-	TextUpdated.Broadcast(GetScreenText());
+	TextUpdated.Broadcast(GPrompt + InputLine);
+}
+
+void UTerminal::WriteLine(FString& Line)
+{
+	TextWriteLine.Broadcast(Line);
 }

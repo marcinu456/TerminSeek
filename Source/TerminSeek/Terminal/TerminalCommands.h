@@ -1,5 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "TerminalCommands.generated.h"
 
 
 UENUM(BlueprintType)

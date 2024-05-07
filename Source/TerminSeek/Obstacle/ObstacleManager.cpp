@@ -33,3 +33,25 @@ void AObstacleManager::Tick(float DeltaTime)
 
 }
 
+FString AObstacleManager::SendCommandAndParameterToObstacle(EObstacleType ObstacleType, FString Parameter, FString ObstacleName)
+{
+	FString Response = "No response";
+
+	//Send the command to all the obstacles
+	for (AObstacleBase* Obstacle : Obstacles)
+	{
+		if(Obstacle->GetClass()->ImplementsInterface(UObstacleInterface::StaticClass()))
+		{
+			if(IObstacleInterface::Execute_GetObstacleType(Obstacle) == ObstacleType && IObstacleInterface::Execute_GetObstacleName(Obstacle) == ObstacleName)
+			{
+				Response = IObstacleInterface::Execute_ReceiveCommandAndParameter(Obstacle, Parameter);
+				break;
+			}
+		}
+
+	}
+	return Response;
+}
+
+
+

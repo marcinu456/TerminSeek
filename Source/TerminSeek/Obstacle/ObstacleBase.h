@@ -24,11 +24,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Functions
+	
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Obstacle")
 	EObstacleType ObstacleType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"), Category = "Obstacle")
+	FString ObstacleName;
+
 //Interface Functions
 public:
 	virtual EObstacleType GetObstacleType_Implementation() override { return ObstacleType; }
+
+	virtual FString GetObstacleName_Implementation() override { return ObstacleName; }
+
+	virtual FString ReceiveCommandAndParameter_Implementation(const FString& Parameter) override { return "false"; }
 };

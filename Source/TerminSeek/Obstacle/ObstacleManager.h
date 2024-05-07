@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ObstacleManager.generated.h"
 
+enum class EObstacleType : uint8;
 class AObstacleBase;
 
 UCLASS()
@@ -24,6 +25,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FString SendCommandAndParameterToObstacle(EObstacleType ObstacleType, FString Parameter, FString ObstacleName);
 
 private:
 	TArray<AObstacleBase* > Obstacles;

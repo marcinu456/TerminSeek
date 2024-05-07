@@ -25,4 +25,12 @@ class IObstacleInterface
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Obstacle")
 	EObstacleType GetObstacleType();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Obstacle")
+	FString GetObstacleName();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Obstacle")
+	FString ReceiveCommandAndParameter(const FString& Parameter);
+
+
 };

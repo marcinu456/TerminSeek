@@ -7,6 +7,7 @@
 #include "TerminalCommands.h"
 #include "GameTerminalCartridge.generated.h"
 
+class AObstacleManager;
 /**
  * 
  */
@@ -27,5 +28,10 @@ private:
 	FTerminalCommands TerminalCommand;
 
 	TArray<FString> SplitLine(const FString& Line);
+
+	UPROPERTY()
+	AObstacleManager *ObstacleManager;
+
+	void SetObstacleManager();
 
 };

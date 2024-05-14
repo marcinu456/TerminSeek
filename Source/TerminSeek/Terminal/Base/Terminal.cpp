@@ -53,8 +53,8 @@ void UTerminal::PrintLine(const FString& Line)
 
 void UTerminal::ClearScreen()
 {
-	//Buffer.Empty();
-	//UpdateText();
+	InputLine = TEXT("");
+	UpdateCurrentTextLine();
 }
 
 FString UTerminal::GetScreenText() const
@@ -187,7 +187,7 @@ FString UTerminal::GetKeyString(FKey Key) const
 
 void UTerminal::UpdateCurrentTextLine()
 {
-	TextUpdated.Broadcast(GPrompt + InputLine);
+	TextUpdated.Broadcast(InputLine);
 }
 
 void UTerminal::WriteLine(FString& Line)
